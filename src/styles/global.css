@@ -1,1 +1,9 @@
 @import url("../../node_modules/water.css/out/water.min.css");
+
+.flex {
+  display: flex;
+}
+
+.columns > div {
+  width: 50%;
+}
