@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import Nav from "../../components/Nav";
+import Nav from "~/components/Nav";
 
 export default function SSR() {
   return (
