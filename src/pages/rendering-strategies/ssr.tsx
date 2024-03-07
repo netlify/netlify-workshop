@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import Nav from '~/components/Nav';
 
 // Assuming you have a simple component to display posts
-function Post({ id, title, body }) {
+function Post({ title, body }) {
   return (
     <div>
       <h2><a>{title}</a></h2>
