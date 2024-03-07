@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import logoLight from "../assets/logo-light.svg";
-import logoDark from "../assets/logo-dark.svg";
+// import logoDark from "../assets/logo-dark.svg";
 
 interface Props {
   title: string;

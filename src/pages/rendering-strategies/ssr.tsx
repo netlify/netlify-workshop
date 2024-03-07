@@ -1,10 +1,8 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps } from "next";
 
 import Nav from "../../components/Nav";
 
-export default function SSR({}: InferGetServerSidePropsType<
-  typeof getServerSideProps
->) {
+export default function SSR() {
   return (
     <main>
       <Nav title="Server-side rendering" />
@@ -13,7 +11,7 @@ export default function SSR({}: InferGetServerSidePropsType<
   );
 }
 
-export const getServerSideProps: GetServerSideProps<{}> = async ({}) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {},
   };

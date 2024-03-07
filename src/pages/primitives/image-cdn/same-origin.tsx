@@ -28,6 +28,7 @@ export default function SameOrigin() {
         >
           {PHOTOS.map((photo) => (
             <img
+              key={photo}
               loading="lazy"
               src={`/.netlify/images/?url=/photos/${photo}.jpg&w=800&h=500&fit=cover`}
               width="400"

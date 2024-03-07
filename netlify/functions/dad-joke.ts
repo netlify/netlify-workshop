@@ -13,6 +13,7 @@ export default async function joke() {
       console.error(`HTTP error! status: ${response.status}`);
     }
     const json = await response.json();
+    // @ts-expect-error this syntax is allowed
     return Response.json(json);
   } catch (error) {
     console.error("Failed to fetch a dad joke:", error);
