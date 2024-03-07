@@ -10,7 +10,7 @@ function Post({ title, body }) {
   );
 }
 
-export default function SSR({ posts }) {
+export default function SSG({ posts }) {
   return (
     <main>
       <Nav title="Static Site Generation with Next.js" />
