@@ -1,2 +1,5 @@
 [build]
   command = "npm run build"
+
+[images]
+  remote_images = ["https://github.com/.*"]
