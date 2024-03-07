@@ -16,6 +16,7 @@
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
     "react/react-in-jsx-scope": 0,
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-unused-vars": "off"
   }
 }
