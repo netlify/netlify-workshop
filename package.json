@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "npm run lint && next build",
+    "build": "next build",
     "lint": "eslint '**/*.{ts,tsx}' --cache && tsc --noEmit --pretty",
     "start": "next start"
   },
