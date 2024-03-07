@@ -1,5 +1,9 @@
 @import url("../../node_modules/water.css/out/water.min.css");
 
+header {
+  margin-bottom: 40px;
+}
+
 .flex {
   display: flex;
 }

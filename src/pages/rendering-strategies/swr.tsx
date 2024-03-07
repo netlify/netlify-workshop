@@ -1,11 +1,14 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
+import Nav from "../../components/Nav";
+
 export default function Index({
   time,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main>
-      <h1>SSR Caching with Next.js</h1>
+      <Nav title="Stale-while-revalidate" />
+      <h1>Stale-while-revalidate</h1>
       <time dateTime={time}>{time}</time>
     </main>
   );
