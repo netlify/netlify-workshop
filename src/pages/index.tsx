@@ -21,7 +21,7 @@ export default function Index() {
               </Link>
             </li>
             <li>
-              <Link href="/rendering-strategies/ssr">
+              <Link href="/rendering-strategies/ssg">
                 Static Site Generation (SSG)
               </Link>
             </li>
