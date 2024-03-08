@@ -1,5 +1,6 @@
-import { Config, stream } from "@netlify/functions";
+import { stream } from "@netlify/functions";
 
+// @ts-expect-error async streams are allowed
 export const handler = stream(async () => {
   const encoder = new TextEncoder();
   const formatter = new Intl.DateTimeFormat("en", { timeStyle: "medium" });
@@ -10,8 +11,8 @@ export const handler = stream(async () => {
       const timer = setInterval(() => {
         controller.enqueue(
           encoder.encode(
-            `<li>Hello at ${formatter.format(new Date())}</li>\n\n`
-          )
+            `<li>Hello at ${formatter.format(new Date())}</li>\n\n`,
+          ),
         );
         if (i++ >= 5) {
           controller.enqueue(encoder.encode("</ol></body></html>"));
@@ -19,15 +20,13 @@ export const handler = stream(async () => {
           clearInterval(timer);
         }
       }, 1000);
-    }
+    },
   });
   return {
     headers: {
-      "content-type": "text/html"
+      "content-type": "text/html",
     },
     statusCode: 200,
-    body
+    body,
   };
 });
-
-

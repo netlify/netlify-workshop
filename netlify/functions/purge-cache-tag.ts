@@ -13,5 +13,5 @@ export default async (req: Request) => {
     tags: [cacheTag],
   });
 
-  return new Response("Purged!", { status: 202 })
+  return new Response("Purged!", { status: 202 });
 };

@@ -1,9 +1,15 @@
 import Nav from "~/components/Nav";
 
+type Post = {
+  id: string;
+  title: string;
+  body: string;
+};
+
 // Assuming you have a simple component to display posts
-function Post({ title, body }) {
+function Post({ id, title, body }: Post) {
   return (
-    <div>
+    <div id={id}>
       <h2>
         <a>{title}</a>
       </h2>
@@ -12,7 +18,7 @@ function Post({ title, body }) {
   );
 }
 
-export default function SSG({ posts }) {
+export default function SSG({ posts }: { posts: Post[] }) {
   return (
     <main>
       <Nav title="Static Site Generation with Next.js" />

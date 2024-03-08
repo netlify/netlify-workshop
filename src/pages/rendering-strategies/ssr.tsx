@@ -1,10 +1,16 @@
 import { GetServerSideProps } from "next";
 import Nav from "~/components/Nav";
 
+type Post = {
+  id: string;
+  title: string;
+  body: string;
+};
+
 // Assuming you have a simple component to display posts
-function Post({ title, body }) {
+function Post({ id, title, body }: Post) {
   return (
-    <div>
+    <div id={id}>
       <h2>
         <a>{title}</a>
       </h2>
@@ -13,7 +19,7 @@ function Post({ title, body }) {
   );
 }
 
-export default function SSR({ posts }) {
+export default function SSR({ posts }: { posts: Post[] }) {
   return (
     <main>
       <Nav title="Server-side rendering with Next.js" />

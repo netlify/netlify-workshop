@@ -17,10 +17,7 @@ export default function Geolocation() {
       <section>
         <h1>Edge Functions: Geolocation Data</h1>
         <button onClick={handleClick}>Query for my location</button>
-        <div>
-          {geo}
-        </div>
-
+        <div>{geo}</div>
       </section>
     </main>
   );
