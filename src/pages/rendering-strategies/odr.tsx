@@ -1,16 +1,21 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Link from "next/link";
+import { useState } from "react";
 
 import Nav from "~/components/Nav";
 
 export default function Index({
   time,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [isPurging, setIsPurging] = useState(false);
+  const [finishedPurging, setFinishedPurging] = useState(false);
 
   const purgeCache = async () => {
+    setIsPurging(true);
     const response = await fetch("/.netlify/functions/purge-cache-tag?tag=odr");
     if (response.ok) {
       console.log("Purged!");
+      setIsPurging(false);
+      setFinishedPurging(true);
     }
   }
 
@@ -30,8 +35,14 @@ export default function Index({
       <br/>
 
       <div>
-        <button onClick={purgeCache}>Purge this page by cache tag: [odr]</button>
+        <button onClick={purgeCache}>{isPurging ? "Purging..." : "Purge this page by cache tag: [odr]"}</button>
       </div>
+
+      {finishedPurging && (
+        <div style={{ padding: '2rem', backgroundColor: "#29753d", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
+          <p>Purged! Refresh the page to see the updated revalidation time!</p>
+        </div>
+      )}
     </main>
   );
 }
