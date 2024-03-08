@@ -13,7 +13,6 @@ export default function Index({
     setIsPurging(true);
     const response = await fetch("/.netlify/functions/purge-cache-tag?tag=odr");
     if (response.ok) {
-      console.log("Purged!");
       setIsPurging(false);
       setFinishedPurging(true);
     }

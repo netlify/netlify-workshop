@@ -6,9 +6,10 @@ export default function Proxy() {
 
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   
   const getStreamResponse = async () => {
+    setError(false);
     setLoading(true);
     const response = await fetch("/.netlify/functions/stream");
     
@@ -16,6 +17,7 @@ export default function Proxy() {
 
     if (!reader) {
       console.error("No reader available");
+      setError(true);
       return;
     }
 
@@ -37,7 +39,7 @@ export default function Proxy() {
       <Nav title="Streaming Function Responses" />
       <section>
         <button onClick={getStreamResponse}>{!loading ? "Get a streaming response" : "Fetching response..."}</button>
-        {error && <p>{error}</p>}
+        {error && <p>An error occurred fetching streaming response</p>}
         <div dangerouslySetInnerHTML={{__html: response}}></div>
       </section>
     </main>
