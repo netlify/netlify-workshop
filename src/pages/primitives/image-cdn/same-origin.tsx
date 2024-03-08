@@ -16,7 +16,7 @@ const PHOTOS = [
 export default function SameOrigin() {
   return (
     <main>
-      <Nav title="Proxy API requests" />
+      <Nav title="Same-origin images" />
       <section>
         <h1>Automatic image optimization</h1>
         <div

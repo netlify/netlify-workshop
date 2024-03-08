@@ -1,15 +1,10 @@
 import Nav from "~/components/Nav";
-const GH_USERS = [
-  "jasonbarry",
-  "bridgpal",
-  "dashedstripes",
-  "rsedighi"
-];
+const GH_USERS = ["jasonbarry", "bridgpal", "dashedstripes", "rsedighi"];
 
 export default function Remote() {
   return (
     <main>
-      <Nav title="Proxy API requests" />
+      <Nav title="Remote images" />
       <section>
         <h1>Remote image on Netlify CDN</h1>
         <div
