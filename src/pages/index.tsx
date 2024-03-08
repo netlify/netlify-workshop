@@ -44,12 +44,12 @@ export default function Index() {
                 Access blob storage
               </Link>
             </li>
-          </ul>
-          <h3>Edge functions</h3>
-          <ul>
             <li>
               <Link href="/primitives/functions/streams">Streams</Link>
             </li>
+          </ul>
+          <h3>Edge functions</h3>
+          <ul>
             <li>
               <Link href="/primitives/edge-functions/transformations">
                 Transformations
