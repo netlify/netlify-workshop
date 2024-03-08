@@ -30,6 +30,11 @@ export default function Index() {
                 Incremental Static Regeneration (ISR)
               </Link>
             </li>
+            <li>
+              <Link href="/rendering-strategies/odr">
+                On-Demand Revalidation (ODR)
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
