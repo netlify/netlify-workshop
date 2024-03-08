@@ -28,7 +28,7 @@ export default function Blobs() {
 
   async function updateTodos(t: Todo[]) {
     await fetch("/.netlify/functions/blob", {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(t),
     });
   }

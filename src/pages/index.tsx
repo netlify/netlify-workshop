@@ -6,20 +6,6 @@ export default function Index() {
   return (
     <main>
       <Nav title="Netlify Workshop" />
-
-      <div
-        style={{
-          padding: "2rem",
-          backgroundColor: "#014847",
-          color: "white",
-          borderRadius: "6px",
-          textAlign: "center",
-          marginTop: "1rem",
-        }}
-      >
-        <p>Anything with a * next to it still needs to be implemented</p>
-      </div>
-
       <section className="flex columns">
         <div>
           <h2>Rendering strategies</h2>
@@ -54,11 +40,6 @@ export default function Index() {
               <Link href="/primitives/functions/proxy">Proxy to APIs</Link>
             </li>
             <li>
-              <Link href="/primitives/functions/blobs">
-                Access blob storage
-              </Link>
-            </li>
-            <li>
               <Link href="/primitives/functions/streams">Streams</Link>
             </li>
           </ul>
@@ -74,9 +55,12 @@ export default function Index() {
                 Geolocation
               </Link>
             </li>
+          </ul>
+          <h3>Blobs</h3>
+          <ul>
             <li>
-              <Link href="/primitives/edge-functions/localization">
-                Localization *
+              <Link href="/primitives/functions/blobs">
+                Access blob storage
               </Link>
             </li>
           </ul>

@@ -8,11 +8,11 @@ export default async (req: Request) => {
     return new Response(todos || JSON.stringify([]), { status: 200 });
   }
 
-  if (req.method === "POST") {
+  if (req.method === "PUT") {
     const body = await req.json();
     await store.set("todos", JSON.stringify(body));
     return new Response("Todos updated", { status: 200 });
   }
 
-  return new Response("Unsupported method");
+  return new Response("Unsupported method", { status: 405 });
 };
