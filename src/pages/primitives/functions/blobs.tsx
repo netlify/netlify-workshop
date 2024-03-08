@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import Nav from '~/components/Nav';
 
 interface Todo {
   key: string;
@@ -53,6 +54,7 @@ export default function Blobs() {
 
   return (
     <div>
+      <Nav title="Blob Storage" />
       <h1>Todo List</h1>
       <input type="text" value={newTodo} onChange={handleInputChange} />
       <button onClick={handleAddTodo}>Add Todo</button>

@@ -7,7 +7,7 @@ export default function Index() {
     <main>
       <Nav title="Netlify Workshop" />
 
-      <div style={{ padding: '2rem', backgroundColor: "#9e5b42", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
+      <div style={{ padding: '2rem', backgroundColor: "#014847", color: "white", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
         <p>Anything with a * next to it still needs to be implemented</p>
       </div>
       
