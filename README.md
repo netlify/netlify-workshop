@@ -88,8 +88,6 @@ You can manage environment variables in the UI and CLI.
 
 Go to **Site configuration > Environment variables** to add site-specific env vars to your site. 
 
-![Environment variables form](media/env-var-form.png)
-
 In the CLI, enter the following command to create an environment variable that is scoped to the Functions runtime: 
 
 ```bash
@@ -106,6 +104,7 @@ netlify env:set OPENAI_KEY <YOUR_VALUE> --scope functions
 
 Here, we'll take a quick segue from our CLI and dev environment to showcase more features from the Netlify UI.
 
+- Deploy logs
 - [Log Drains](https://docs.netlify.com/monitor-sites/log-drains/)
 - [Analytics](https://docs.netlify.com/monitor-sites/site-analytics/)
 - [Real User Metrics](https://docs.netlify.com/monitor-sites/real-user-metrics/)
@@ -116,13 +115,18 @@ Here, we'll take a quick segue from our CLI and dev environment to showcase more
 
 <details><summary>Part 2: High-level overview of platform primitives</summary>
 
+Here, we'll list out use cases and limitations of core primitives, and why you would choose one over the other.
+
+- Functions
+- Edge Functions
+- Blobs
+- Image CDN
+
 </details>
 
 ### Platform primitives
 
 <details><summary>Part 1: Configuring headers, proxies, and redirects</summary>
-
-You'll notice that when you refresh a page on the `/books/{id}` route, the site 404s. Why is that? Since this frontend stack utilizes React as an SPA (Single Page Application), there is only one single HTML file (`/index.html`) inside of the deploy, and routing is managed exclusively by JavaScript referenced in that file. We'll need to add a [redirect](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps) that routes 404s to `/index.html`.
 
 Inside your publish directory (for this repo, `/public`), add a `_redirects` file that contains the following: 
 
@@ -159,69 +163,22 @@ You can also configure both redirects and headers inside the `/netlify.toml` fil
 
 </details>
 
-<details><summary>Part 2: Going serverless with Functions</summary>
+<details><summary>Part 2: Rendering techniques and caching strategies</summary>
 
-Our site is looking a little bare. Let's add some content! First we'll fetch a list of books that we happen to have as a [CSV file saved inside the /public directory](https://github.com/netlify/compose-workshop-2023/blob/main/public/books.csv).
+i. Purge cache of specific tags using an API call
 
-i. Add the `Bookshelf` component to `src/pages/index.tsx`
-
-```diff
-+import Bookshelf from '~/components/Bookshelf';
-import Footer from '~/components/Footer';
-import Hero from '~/components/Hero';
-
-export default function Home() {
-  return (
-    <section>
-      <Hero />
-+     <Bookshelf />
-      <Footer />
-    </section>
-  );
-}
+```bash
+curl -X POST 'https://api.netlify.com/api/v1/purge' \
+  -H 'Authorization: Bearer <token>' \
+  -H 'Content-Type: application/json' \
+  -d '{"site_id":"$SITE_ID","cache_tags":["books"]}'
 ```
 
-ii. Return data from a CSV in an API response in `netlify/functions/books.ts`
+💡 Learn more about [caching](https://docs.netlify.com/platform/caching/) in our docs.
 
-```typescript
-import csv from 'csvtojson';
+</details>
 
-export default async (req: Request) => {
-  const { origin } = new URL(req.url);
-  const response = await fetch(`${origin}/books.csv`);
-  const csvContent = await response.text();
-  const books = await csv().fromString(csvContent);
-  
-  return Response.json(books);
-};
-```
-
-💡 Invoke your function from the CLI:
-
-```
-netlify functions:invoke books
-```
-
-iii. Fetch from the function in `src/context/DataProvider.tsx`
-
-```diff
-function StoreProvider({ children }: Props) {
-- const books = [] as Book[];
-+ const [books, setBooks] = useState<Book[]>([]);
-
-  const fetchBooks = async () => {
-+   if (!books.length) {
-+     const response = await fetch(`/.netlify/functions/books`);
-+     const data = await response.json();
-+     setBooks(data);
-+   }
-  };
-}
-```
-
-That's nice, but we can only return all the books, when sometimes we only want one book at a time. Let's add a custom path with an optional slug in the API route.
-
-iv. Export custom config to control method, route, etc in `netlify/functions/books.ts`
+<details><summary>Part 3: Going serverless with Functions</summary>
 
 ```typescript
 export const config: Config = {
@@ -232,149 +189,15 @@ export const config: Config = {
 
 💡 The `path` parameter follows the [URL Pattern API](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API) spec.
 
-
-v. Change your clientside API call to new route in `src/context/DataProvider.tsx`
-
-```diff
--  const fetchBooks = async () => {
--   if (!books.length) {
--     const response = await fetch(`/.netlify/functions/books`);
--     const data = await response.json();
--     setBooks(data);
--   }
--  };
-+  const fetchBooks = async (id: string = '') => {
-+    if (books.length <= 1) {
-+      const response = await fetch(`/api/books/${id}`);
-+      const data = await response.json();
-+      setBooks(Array.isArray(data) ? data : [data]);
-+    }
-+  };
-```
-
-vi. Extract and log the id from the URL params in `netlify/functions/books.ts`
-
-```diff
--export default async (req: Request) => {
-+export default async (req: Request, context: Context) => {
-+  const { id } = context.params;
-+  console.log(`Looking up ${id || 'all books'}...`);
-```
-
-vii. Return a single book if the slug is present before the last return statement
-
-```typescript
-if (id) {
-  const book = books.find(b => b.id === id);
-  if (!book) {
-    return new Response('Not found', { status: 404 });
-  }
-  return Response.json(book);
-}
-```
-
 💡 Learn more about [Functions](https://docs.netlify.com/functions/overview/) in our docs.
 
 </details>
 
-<details><summary>Part 3: Run middleware and personalize with Edge Functions</summary>
+<details><summary>Part 4: Run middleware and personalize with Edge Functions</summary>
 
 We're going to make a swag section of the site that is personalized to the user based on their geolocation. Edge functions act as middleware for the CDN &mdash; they run in front of other routes!
 
-i. Add the Swag component to the home page in `src/pages/index.tsx`
-
-```diff
-import Bookshelf from '~/components/Bookshelf';
-import Footer from '~/components/ui/Footer';
-import Hero from '~/components/Hero';
-+import Swag from '~/components/Swag';
-
-export default function Home() {
-  return (
-    <section>
-      <Hero />
-+     <Swag />
-      <Bookshelf />
-      <Footer />
-    </section>
-  );
-}
-```
-
-ii. Fetch the swag in `netlify/context/DataProvider.tsx`
-
-```diff
-- const swag = [] as Swag[];
-+ const [swag, setSwag] = useState<Swag[]>([]);
-
-  const fetchSwag = async () => {
-+    if (!swag.length) {
-+      const response = await fetch('/api/swag');
-+      const data = await response.json();
-+      setSwag(data);
-+    }
-  };
-```
-
-iii. Sort items ascending based on distance to user in `netlify/functions/swag.ts`
-
-```diff
-import { Config, Context } from '@netlify/functions'
-+import haversine from 'haversine';
-
--export default async (req: Request) => {
-+export default async (req: Request, context: Context) => {
-   // ...
-+  const hasGeo = context.geo?.latitude && context.geo?.longitude;
--  const items = selectRandomItems(merchandise, ITEMS_COUNT);
-+  const items = hasGeo
-+    ? merchandise
-+        .sort(
-+          (a, b) =>
-+            haversine(a.location, context.geo) -
-+            haversine(b.location, context.geo)
-+        )
-+        .slice(0, ITEMS_COUNT)
-+    : selectRandomItems(merchandise, ITEMS_COUNT);
-
-  return Response.json(items);
-};
-```
-
-iv. Rewrite response bodies to contain geolocation data in `netlify/edge-functions/geo.ts`
-
-```typescript
-import { Config, Context } from '@netlify/edge-functions';
-
-export default async (request: Request, context: Context) => {
-  const response = await context.next();
-  response.headers.set('x-custom-header', 'invoked');
-
-  // html GETs only
-  const isGET = request.method?.toUpperCase() === 'GET';
-  const isHTMLResponse = response.headers
-    .get('content-type')
-    ?.startsWith('text/html');
-  if (!isGET || !isHTMLResponse) {
-    return response;
-  }
-
-  const body = await response.text();
-  const transformedBody = body.replace(
-    'window.geo = {}',
-    `window.geo = ${JSON.stringify(context.geo)}`
-  );
-
-  return new Response(transformedBody, response);
-};
-
-export const config: Config = {
-  path: '/*',
-  excludedPath: '/(api|assets|images)/*',
-};
-```
-
-v. Edge Functions are also great places to add A/B testing. You can add a cookie at the edge to segment user traffic into groups (also known as  buckets) to run experimentation. Set a new cookie in `netlify/edge-functions/abtest.ts`: 
+i. Edge Functions are also great places to add A/B testing. You can add a cookie at the edge to segment user traffic into groups (also known as  buckets) to run experimentation. Set a new cookie in `netlify/edge-functions/abtest.ts`: 
 
 ```diff
 + // set the new "ab-test-bucket" cookie
@@ -390,26 +213,15 @@ v. Edge Functions are also great places to add A/B testing. You can add a cookie
 
 </details>
 
-<details><summary>Part 4: Globally persist data with Blobs</summary>
+<details><summary>Part 5: Globally persist data with Blobs</summary>
 
-</details>
-
-<details><summary>Part 5: Rendering techniques and caching strategies</summary>
-
-iii. Purge cache of specific tags using an API call
-
-```bash
-curl -X POST 'https://api.netlify.com/api/v1/purge' \
-  -H 'Authorization: Bearer <token>' \
-  -H 'Content-Type: application/json' \
-  -d '{"site_id":"$SITE_ID","cache_tags":["books"]}'
-```
-
-💡 Learn more about [caching](https://docs.netlify.com/platform/caching/) in our docs.
+Here, we'll discuss how to read and write data to blob storage.
 
 </details>
 
 <details><summary>Part 6: Optimize images at runtime with Image CDN</summary>
+
+Here, we'll discuss how easy it is to optimize images at runtime with Image CDN.
 
 </details>
 
@@ -417,11 +229,14 @@ curl -X POST 'https://api.netlify.com/api/v1/purge' \
 
 Read these recent blog posts focused on Enterprise releases, features,  and use cases.
 
-- Oct 13 2023: [Cache-tags & Purge API](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/)
-- Oct 12 2023: [Introducing Netlify Functions 2.0](https://www.netlify.com/blog/introducing-netlify-functions-2-0/)
-- Sep 28 2023: [Stale-while-revalidate & fine-grained cache control](https://www.netlify.com/blog/swr-and-fine-grained-cache-control/)
-- Sep 13 2023: [General Availability of Netlify Software Development Kit (SDK)](https://www.netlify.com/blog/general-availability-netlify-sdk-software-development-kit/)
-- Aug 29 2023: [Elevating enterprise deployment with enhanced monorepo experience](https://www.netlify.com/blog/elevating-enterprise-deployment-introducing-an-enhanced-monorepo-experience-on-netlify/)
-- Aug 24 2023: [How I learned to stop worrying and love the Content Security Policy](https://www.netlify.com/blog/general-availability-content-security-policy-csp-nonce-integration/)
-- Aug 23 2023: [IP and Geo Restrictions for WAF Security](https://www.netlify.com/blog/general-availability-web-application-firewall-traffic-rules/)
-- Aug 22 2023: [Secrets Controller: Proactive security for secret keys](https://www.netlify.com/blog/general-availability-secrets-controller/)
+- [Netlify + AI: Why’d my deploy fail?](https://www.netlify.com/blog/netlify-ai-why-did-my-deploy-fail/)
+- [Full control over caching with cache ID](https://www.netlify.com/blog/full-control-over-caching-with-cache-id/)
+- [Introducing Netlify Image CDN Beta](https://www.netlify.com/blog/introducing-netlify-image-cdn-beta/)
+- [Introducing Netlify Blobs Beta](https://www.netlify.com/blog/introducing-netlify-blobs-beta/)
+- [Cache-tags & Purge API](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/)
+- [Introducing Netlify Functions 2.0](https://www.netlify.com/blog/introducing-netlify-functions-2-0/)
+- [Stale-while-revalidate & fine-grained cache control](https://www.netlify.com/blog/swr-and-fine-grained-cache-control/)
+- [Elevating enterprise deployment with enhanced monorepo experience](https://www.netlify.com/blog/elevating-enterprise-deployment-introducing-an-enhanced-monorepo-experience-on-netlify/)
+- [How I learned to stop worrying and love the Content Security Policy](https://www.netlify.com/blog/general-availability-content-security-policy-csp-nonce-integration/)
+- [IP and Geo Restrictions for WAF Security](https://www.netlify.com/blog/general-availability-web-application-firewall-traffic-rules/)
+- [Secrets Controller: Proactive security for secret keys](https://www.netlify.com/blog/general-availability-secrets-controller/)
