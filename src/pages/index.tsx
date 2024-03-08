@@ -47,7 +47,7 @@ export default function Index() {
             </li>
             <li>
               <Link href="/primitives/functions/blobs">
-                Access blob storage *
+                Access blob storage
               </Link>
             </li>
             <li>
