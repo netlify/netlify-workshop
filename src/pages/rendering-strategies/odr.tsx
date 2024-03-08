@@ -8,6 +8,7 @@ export default function Index({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isPurging, setIsPurging] = useState(false);
   const [finishedPurging, setFinishedPurging] = useState(false);
+  const [error, setError] = useState(false);
 
   const purgeCache = async () => {
     setIsPurging(true);
@@ -15,6 +16,10 @@ export default function Index({
     if (response.ok) {
       setIsPurging(false);
       setFinishedPurging(true);
+    } else {
+      console.error("Failed to purge cache");
+      setIsPurging(false);
+      setError(true);
     }
   }
 
@@ -40,6 +45,12 @@ export default function Index({
       {finishedPurging && (
         <div style={{ padding: '2rem', backgroundColor: "#29753d", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
           <p>Purged! Refresh the page to see the updated revalidation time!</p>
+        </div>
+      )}
+
+      {error && (
+        <div style={{ padding: '2rem', backgroundColor: "#9d3a3a", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
+          <p>Failed to purge cache, please try again</p>
         </div>
       )}
     </main>
