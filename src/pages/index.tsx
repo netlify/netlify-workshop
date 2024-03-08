@@ -6,6 +6,12 @@ export default function Index() {
   return (
     <main>
       <Nav title="Netlify Workshop" />
+
+      <div style={{ padding: '2rem', backgroundColor: "#9e5b42", borderRadius: "6px", textAlign: "center", marginTop: "1rem"}}>
+        <p>Anything with a * next to it still needs to be implemented</p>
+      </div>
+      
+
       <section className="flex columns">
         <div>
           <h2>Rendering strategies</h2>
@@ -27,7 +33,7 @@ export default function Index() {
             </li>
             <li>
               <Link href="/rendering-strategies/isr">
-                Incremental Static Regeneration (ISR)
+                Incremental Static Regeneration (ISR) *
               </Link>
             </li>
             <li>
@@ -46,7 +52,7 @@ export default function Index() {
             </li>
             <li>
               <Link href="/primitives/functions/blobs">
-                Access blob storage
+                Access blob storage *
               </Link>
             </li>
             <li>
@@ -57,12 +63,12 @@ export default function Index() {
           <ul>
             <li>
               <Link href="/primitives/edge-functions/transformations">
-                Transformations
+                Transformations *
               </Link>
             </li>
             <li>
               <Link href="/primitives/edge-functions/ab-testing">
-                A/B testing
+                A/B testing *
               </Link>
             </li>
             <li>
@@ -72,7 +78,7 @@ export default function Index() {
             </li>
             <li>
               <Link href="/primitives/edge-functions/localization">
-                Localization
+                Localization *
               </Link>
             </li>
           </ul>
