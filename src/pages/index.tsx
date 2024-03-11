@@ -75,14 +75,6 @@ export default function Index() {
               <Link href="/primitives/image-cdn/remote">Remote images</Link>
             </li>
           </ul>
-          <h3>Redirects</h3>
-          <ul>
-            <li>
-              <Link href="/compose">
-                Netlify Compose
-              </Link>
-            </li>
-          </ul>
         </div>
       </section>
     </main>
