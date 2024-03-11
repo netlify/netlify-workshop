@@ -3,3 +3,8 @@
 
 [images]
   remote_images = ["https://github.com/.*"]
+
+[[redirects]]
+  from = "/compose"
+  to = "https://compose-workshop-2023.netlify.app/"
+  status = 200
