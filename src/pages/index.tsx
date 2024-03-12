@@ -40,10 +40,12 @@ export default function Index() {
               <Link href="/primitives/functions/proxy">Proxy to APIs</Link>
             </li>
             <li>
-              <Link href="/primitives/functions/streams">Streams</Link>
+              <Link href="/primitives/functions/combine-and-filter">
+                Combine and filter API responses
+              </Link>
             </li>
             <li>
-              <Link href="/primitives/functions/platform-specific">Platform Specific</Link>
+              <Link href="/primitives/functions/streams">Streams</Link>
             </li>
           </ul>
           <h3>Edge functions</h3>

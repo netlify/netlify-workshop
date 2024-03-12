@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import Nav from "~/components/Nav";
 
 interface Product {
-  id: number,
-  name: string,
-  promo: string | null
+  id: number;
+  name: string;
+  promo: string | null;
 }
 
-export default function PlatformSpecific()  {
-  const [platform, setPlatform] = useState("web");
+export default function PlatformSpecific() {
+  const [platform, setPlatform] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -16,15 +16,15 @@ export default function PlatformSpecific()  {
   }, [platform]);
 
   const fetchProducts = async (platform: string) => {
-    const response = await fetch(`/.netlify/functions/platform-specific?platform=${platform}`);
+    const response = await fetch(`/api/consoles/${platform}`);
     const data = await response.json();
     setProducts(data);
   };
 
   return (
     <div>
-      <Nav title="Platform Specific" />
-      <h1>Platform Specific</h1>
+      <Nav title="Combine and filter API responses" />
+      <h1>Functions: Combine and filter</h1>
       <p>
         This page demonstrates how to use platform-specific functions to serve
         different content based on the platform.
@@ -32,11 +32,26 @@ export default function PlatformSpecific()  {
       <p>
         The current platform is: <strong>{platform}</strong>
       </p>
-      <p><code>GET /.netlify/functions/bff?platform={platform}</code></p>
+      <p>
+        <code>GET /api/consoles/{platform}</code>
+      </p>
 
       <div>
-        <button onClick={() => setPlatform("web")} disabled={platform === "web"}>Web</button>
-        <button onClick={() => setPlatform("mobile")} disabled={platform === "mobile"}>Mobile</button>
+        <button onClick={() => setPlatform("")} disabled={!platform}>
+          All
+        </button>
+        <button
+          onClick={() => setPlatform("web")}
+          disabled={platform === "web"}
+        >
+          Web
+        </button>
+        <button
+          onClick={() => setPlatform("mobile")}
+          disabled={platform === "mobile"}
+        >
+          Mobile
+        </button>
       </div>
 
       <p>
@@ -49,11 +64,10 @@ export default function PlatformSpecific()  {
         {products.map((product) => (
           <li key={product.id}>
             {product.name}
-            {product.promo && <strong> - {product.promo} only!</strong>}
+            {product.promo && <strong> - {product.promo}</strong>}
           </li>
         ))}
       </ul>
-
     </div>
   );
 }

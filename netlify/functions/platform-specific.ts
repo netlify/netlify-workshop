@@ -1,24 +1,44 @@
-const data = { 
+import type { Config, Context } from "@netlify/functions";
+
+// Imagine this is the response of one API endpoint...
+const nintendo = {
   products: [
-    { id: 1, name: 'Gameboy Advance', promo: 'web'},
-    { id: 2, name: 'N64', promo: 'mobile'},
-    { id: 3, name: 'Gamecube', promo: null}
-  ] 
+    { id: "n1", name: "Nintendo Gameboy Advance", promo: "web" },
+    { id: "n2", name: "Super Nintendo", promo: null },
+    { id: "n3", name: "Nintendo 64", promo: "mobile" },
+    { id: "n4", name: "Nintendo Gamecube", promo: null },
+    { id: "n5", name: "Nintendo Switch", promo: "mobile" },
+  ],
 };
 
-export default async (req: Request) => {
+// ...and this is the response of a separate endpoint...
+const sony = {
+  products: [
+    { id: "s1", name: "Sony PSP", promo: "web" },
+    { id: "s2", name: "Sony PlayStation 3", promo: "mobile" },
+    { id: "s3", name: "Sony PlayStation 4", promo: "mobile" },
+    { id: "s4", name: "Sony PlayStation 5", promo: "mobile" },
+  ],
+};
 
-  const query = new URL(req.url).searchParams;
+export default async (req: Request, context: Context) => {
+  const { platform } = context.params;
 
-  if (query.get("platform") == "web") {
-    const webData = data.products.filter((product) => product.promo === "web" || !product.promo);
-    return new Response(JSON.stringify(webData), { status: 200 });
+  // ... you can combine them into a single endpoint ...
+  const allProducts = nintendo.products.concat(sony.products);
+
+  if (!platform) {
+    return Response.json(allProducts);
   }
 
-  if (query.get("platform") == "mobile") {
-    const mobileData = data.products.filter((product) => product.promo === "mobile" || !product.promo);
-    return new Response(JSON.stringify(mobileData), { status: 200 });
-  }
+  // ... and/or filter as needed
+  const filteredProducts = allProducts.filter(
+    (product) => product.promo === platform,
+  );
+  return Response.json(filteredProducts);
+};
 
-  return new Response("Unsupported method", { status: 405 });
+export const config: Config = {
+  method: "GET",
+  path: "/api/consoles{/:platform}?", // https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API
 };
