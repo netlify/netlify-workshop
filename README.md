@@ -1,6 +1,6 @@
 # Netlify Core Workshop
 
-In this workshop, you will learn how to create your first composable website with Netlify. You'll learn features of the Netlify platform, and will deep dive into core primitives. 
+In this workshop, you will learn how to create your first composable website with Netlify. You'll learn features of the Netlify platform, and will deep dive into core primitives.
 
 The site showcasing all workshop examples is available here: [https://netlify-core-workshop.netlify.app](https://netlify-core-workshop.netlify.app)
 
@@ -15,7 +15,7 @@ In this workshop, you will learn how to:
 - Learn about different caching and page rendering strategies
 - Personalize user experiences with Netlify Edge Functions
 - Read and write to a globally-distributed data store using Netlify Blobs
-- Optimize images on the fly with Netlify Image CDN 
+- Optimize images on the fly with Netlify Image CDN
 
 ## Let's get started
 
@@ -23,13 +23,15 @@ In this workshop, you will learn how to:
 
 <details><summary>Part 1: Initial setup</summary>
 
-i. [Log in to Netlify](http://app.netlify.com). If you haven't made an account yet, then [sign up](https://app.netlify.com/signup). 
+i. [Log in to Netlify](http://app.netlify.com). If you haven't made an account yet, then [sign up](https://app.netlify.com/signup).
 
 ii. Install the [Netlify GitHub app](https://github.com/apps/netlify/installations/select_target) on your org or personal GitHub account if you have not done so already.
 
-iii. Deploy this repo to Netlify! Clicking the button below will copy the contents of this repo into a repo that you control, and create a new site that is linked to your new repo. 
+iii. Deploy this repo to Netlify! Clicking the button below will copy the contents of this repo into a repo that you control, and create a new site that is linked to your new repo.
 
-DTN BUTTON GO HERE
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/netlify/netlify-workshop">
+  <img src="https://www.netlify.com/img/deploy/button.svg" alt="" title="Deploy to Netlify">
+</a>
 
 iv. Clone your new repo, and install dependencies locally.
 
@@ -67,11 +69,11 @@ You should see a link to the Deploy Preview as a comment by the Netlify bot on t
 
 In addition to deploy logs, the Netlify UI gives you access to function logs as well. You can change the region a function executes by changing the region selector in **Site configuration > Build & deploy > Functions**.
 
-In the Deploy Preview itself, you'll notice a floating toolbar anchored to the bottom of your screen. This is the [Netlify Drawer](https://www.netlify.com/products/deploy-previews/). You and your teammates can use this to leave feedback to each other about the Deploy Preview. Any comments you make will sync back to the pull request on GitHub (or any Git service that you may use). 
+In the Deploy Preview itself, you'll notice a floating toolbar anchored to the bottom of your screen. This is the [Netlify Drawer](https://www.netlify.com/products/deploy-previews/). You and your teammates can use this to leave feedback to each other about the Deploy Preview. Any comments you make will sync back to the pull request on GitHub (or any Git service that you may use).
 
 Back in the pull request, merge to main. This will kick off a production build. Every deploy is [atomic](https://jamstack.org/glossary/atomic/) and [immutable](https://jamstack.org/glossary/immutable/), which makes [instant rollbacks](https://docs.netlify.com/site-deploys/manage-deploys/#rollbacks) a breeze.
 
-In your local repo, sync up with the changes from `main` again: 
+In your local repo, sync up with the changes from `main` again:
 
 ```bash
 git checkout main
@@ -84,11 +86,11 @@ git pull origin main
 
 <details><summary>Part 3: Share environment variables with your team</summary>
 
-You can manage environment variables in the UI and CLI. 
+You can manage environment variables in the UI and CLI.
 
-Go to **Site configuration > Environment variables** to add site-specific env vars to your site. 
+Go to **Site configuration > Environment variables** to add site-specific env vars to your site.
 
-In the CLI, enter the following command to create an environment variable that is scoped to the Functions runtime: 
+In the CLI, enter the following command to create an environment variable that is scoped to the Functions runtime:
 
 ```bash
 netlify env:set OPENAI_KEY <YOUR_VALUE> --scope functions
@@ -128,7 +130,7 @@ Here, we'll list out use cases and limitations of core primitives, and why you w
 
 <details><summary>Part 1: Configuring headers, proxies, and redirects</summary>
 
-Inside your publish directory (for this repo, `/public`), add a `_redirects` file that contains the following: 
+Inside your publish directory (for this repo, `/public`), add a `_redirects` file that contains the following:
 
 ```
 /*  /index.html  200
@@ -136,16 +138,16 @@ Inside your publish directory (for this repo, `/public`), add a `_redirects` fil
 
 For every fallthrough case (i.e. whenever a route is accessed and there isn't a file match), it will now redirect back to `/index.html`, where `react-router` will route accordingly.
 
-Similar to the `_redirects` file is the `_headers` file. Here you can set custom headers for routes of your choosing. Create a `/public/_headers` file, and save the following: 
+Similar to the `_redirects` file is the `_headers` file. Here you can set custom headers for routes of your choosing. Create a `/public/_headers` file, and save the following:
 
 ```
-/* 
+/*
   X-Frame-Options: SAMEORIGIN
 ```
 
-This will prevent your site from being loaded in an iframe, a technique that help your site prevent [clickjacking](https://en.wikipedia.org/wiki/Clickjacking) attacks. 
+This will prevent your site from being loaded in an iframe, a technique that help your site prevent [clickjacking](https://en.wikipedia.org/wiki/Clickjacking) attacks.
 
-You can also configure both redirects and headers inside the `/netlify.toml` file. Here is the `netlify.toml` equivalents of the above: 
+You can also configure both redirects and headers inside the `/netlify.toml` file. Here is the `netlify.toml` equivalents of the above:
 
 ```
 [[redirects]]
@@ -182,8 +184,8 @@ curl -X POST 'https://api.netlify.com/api/v1/purge' \
 
 ```typescript
 export const config: Config = {
-  method: 'GET',
-  path: '/api/books{/:id}?',
+  method: "GET",
+  path: "/api/books{/:id}?",
 };
 ```
 
@@ -197,7 +199,7 @@ export const config: Config = {
 
 We're going to make a swag section of the site that is personalized to the user based on their geolocation. Edge functions act as middleware for the CDN &mdash; they run in front of other routes!
 
-i. Edge Functions are also great places to add A/B testing. You can add a cookie at the edge to segment user traffic into groups (also known as  buckets) to run experimentation. Set a new cookie in `netlify/edge-functions/abtest.ts`: 
+i. Edge Functions are also great places to add A/B testing. You can add a cookie at the edge to segment user traffic into groups (also known as buckets) to run experimentation. Set a new cookie in `netlify/edge-functions/abtest.ts`:
 
 ```diff
 + // set the new "ab-test-bucket" cookie
@@ -205,7 +207,7 @@ i. Edge Functions are also great places to add A/B testing. You can add a cookie
 +   name: bucketName,
 +   value: newBucketValue,
 + });
-  
+
   return response;
 ```
 
@@ -227,7 +229,7 @@ Here, we'll discuss how easy it is to optimize images at runtime with Image CDN.
 
 ## Recent Enterprise-focused resources from our blog
 
-Read these recent blog posts focused on Enterprise releases, features,  and use cases.
+Read these recent blog posts focused on Enterprise releases, features, and use cases.
 
 - [Netlify + AI: Why’d my deploy fail?](https://www.netlify.com/blog/netlify-ai-why-did-my-deploy-fail/)
 - [Full control over caching with cache ID](https://www.netlify.com/blog/full-control-over-caching-with-cache-id/)
