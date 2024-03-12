@@ -11,6 +11,11 @@ export default function Index() {
           <h2>Rendering strategies</h2>
           <ul>
             <li>
+              <Link href="/rendering-strategies/ssg">
+                Static site generation (SSG)
+              </Link>
+            </li>
+            <li>
               <Link href="/rendering-strategies/ssr">
                 Server-side rendering (SSR)
               </Link>
@@ -20,15 +25,20 @@ export default function Index() {
                 Stale-while-revalidate (SWR)
               </Link>
             </li>
-            <li>
-              <Link href="/rendering-strategies/ssg">
-                Static Site Generation (SSG)
-              </Link>
-            </li>
+
             <li>
               <Link href="/rendering-strategies/odr">
-                On-Demand Revalidation (ODR)
+                On-demand revalidation (ODR)
               </Link>
+            </li>
+          </ul>
+          <h2>Rewrites and redirects</h2>
+          <ul>
+            <li>
+              <Link href="/docs">Rewrite</Link>
+            </li>
+            <li>
+              <Link href="/home">Redirect</Link>
             </li>
           </ul>
         </div>

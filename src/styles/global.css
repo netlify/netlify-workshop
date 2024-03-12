@@ -1,13 +1,14 @@
 @import url("~/node_modules/water.css/out/light.min.css");
 
-header {
-  margin-bottom: 40px;
-}
-
 .flex {
   display: flex;
 }
 
 .columns > div {
   width: 50%;
+}
+
+h1,
+h2 {
+  margin-top: 40px;
 }

@@ -1,0 +1,2 @@
+/docs/*  https://docs.netlify.app/:splat  200!
+/home    /                                301

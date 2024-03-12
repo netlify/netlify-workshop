@@ -11,9 +11,7 @@ type Post = {
 function Post({ id, title, body }: Post) {
   return (
     <div id={id}>
-      <h2>
-        <a>{title}</a>
-      </h2>
+      <h3>{title}</h3>
       <p>{body}</p>
     </div>
   );
@@ -45,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch("https://dummyjson.com/posts?limit=10");
   const data = await res.json();
   const posts = data.posts;
-  console.log("Generating from server:", posts);
+  console.log(`Fetched ${posts.length} dummy blog posts at request-time`);
 
   return {
     props: {

@@ -10,8 +10,8 @@ export default function Remote() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 8,
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 40,
           }}
         >
           {GH_USERS.map((user) => (
@@ -19,8 +19,8 @@ export default function Remote() {
               key={user}
               loading="lazy"
               src={`/.netlify/images/?url=https://github.com/${user}.png`}
-              width="400"
-              height="250"
+              style={{ borderRadius: 100 }}
+              width="200"
             />
           ))}
         </div>

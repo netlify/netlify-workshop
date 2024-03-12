@@ -36,6 +36,7 @@ export default function Proxy() {
   return (
     <main>
       <Nav title="Streaming Function Responses" />
+      <h1>Functions: Streaming Responses</h1>
       <section>
         <button onClick={getStreamResponse}>
           {!loading ? "Get a streaming response" : "Fetching response..."}
