@@ -1,2 +1,2 @@
-/docs/*  https://edge-functions-examples.netlify.app/:splat  200!
-/home    /     301
+/rewrite-example/*  https://dynamic-og-images-example.netlify.app/:splat  200!
+/redirect-example   https://dynamic-og-images-example.netlify.app         301
