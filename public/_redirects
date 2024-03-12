@@ -1,2 +1,2 @@
-/docs/*  https://docs.netlify.app/:splat  200!
-/home    /                                301
+/docs/*  https://edge-functions-examples.netlify.app/:splat  200!
+/home    /     301

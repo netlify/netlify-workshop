@@ -32,13 +32,13 @@ export default function Index() {
               </Link>
             </li>
           </ul>
-          <h2>Rewrites and redirects</h2>
+          <h2>Redirects and rewrites</h2>
           <ul>
             <li>
-              <Link href="/docs">Rewrite</Link>
+              <Link href="/home">Redirect</Link>
             </li>
             <li>
-              <Link href="/home">Redirect</Link>
+              <Link href="/docs">Rewrite</Link>
             </li>
           </ul>
         </div>
