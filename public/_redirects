@@ -1,2 +1,3 @@
-/rewrite-example/*  https://dynamic-og-images-example.netlify.app/:splat  200!
-/redirect-example   https://dynamic-og-images-example.netlify.app         301
+/preview-image/*    https://dynamic-og-images-example.netlify.app/:splat      200
+/styles.css         https://dynamic-og-images-example.netlify.app/styles.css  200
+/redirect-example   https://dynamic-og-images-example.netlify.app             301

@@ -38,7 +38,7 @@ export default function Index() {
               <Link href="/redirect-example">Redirect example</Link>
             </li>
             <li>
-              <Link href="/rewrite-example">Rewrite example</Link>
+              <Link href="/preview-image">Rewrite example</Link>
             </li>
           </ul>
         </div>
