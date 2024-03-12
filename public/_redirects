@@ -1,3 +1,4 @@
+/preview-image      https://dynamic-og-images-example.netlify.app/                       200
 /preview-image/*    https://dynamic-og-images-example.netlify.app/preview-image/:splat   200
-/styles.css         https://dynamic-og-images-example.netlify.app/styles.css             200
+/styles.css         https://dynamic-og-images-example.netlify.app/styles.css             200!
 /redirect-example   https://dynamic-og-images-example.netlify.app                        301
