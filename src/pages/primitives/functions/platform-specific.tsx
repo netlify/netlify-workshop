@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Nav from "~/components/Nav";
 
 interface Product {
@@ -16,7 +16,7 @@ export default function PlatformSpecific()  {
   }, [platform]);
 
   const fetchProducts = async (platform: string) => {
-    const response = await fetch(`/.netlify/functions/bff?platform=${platform}`);
+    const response = await fetch(`/.netlify/functions/platform-specific?platform=${platform}`);
     const data = await response.json();
     setProducts(data);
   };
