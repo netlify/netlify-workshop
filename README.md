@@ -23,7 +23,7 @@ In this workshop, you will learn how to:
 
 <details><summary>Part 1: Initial setup</summary><br />
 
-i. [Log in to Netlify](http://app.netlify.com). If you haven't made an account yet, then [sign up](https://app.netlify.com/signup).
+i. [Log in to Netlify](https://app.netlify.com). If you haven't made an account yet, then [sign up](https://app.netlify.com/signup).
 
 ii. Install the [Netlify GitHub app](https://github.com/apps/netlify/installations/select_target) on your org or personal GitHub account if you have not done so already.
 
