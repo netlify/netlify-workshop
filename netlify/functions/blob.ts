@@ -6,7 +6,7 @@ export default async (req: Request) => {
   if (req.method === "GET") {
     const todos = await store.get("todos", { type: "json" });
     // @ts-expect-error `new` operator not needed for Response.json()
-    return Response.json(todos || JSON.stringify([]), { status: 200 });
+    return Response.json(todos || [], { status: 200 });
   }
 
   if (req.method === "PUT") {
