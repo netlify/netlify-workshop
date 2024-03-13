@@ -167,29 +167,32 @@ You can also configure both redirects and headers inside the `/netlify.toml` fil
 
 <details><summary>Part 2: Rendering techniques and caching strategies</summary>
 
-i. Purge cache of specific tags using an API call
-
-```bash
-curl -X POST 'https://api.netlify.com/api/v1/purge' \
-  -H 'Authorization: Bearer <token>' \
-  -H 'Content-Type: application/json' \
-  -d '{"site_id":"$SITE_ID","cache_tags":["books"]}'
-```
-
 💡 Learn more about [caching](https://docs.netlify.com/platform/caching/) in our docs.
 
 </details>
 
 <details><summary>Part 3: Going serverless with Functions</summary>
 
-```typescript
-export const config: Config = {
-  method: "GET",
-  path: "/api/books{/:id}?",
+**🧑‍💻 Relevant demo and code:**
+
+- [Proxy to APIs](https://netlify-core-workshop.netlify.app/primitives/functions/proxy) ([netlify/functions/dad-joke.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/functions/dad-joke.ts))
+- [Combine and filter APIs](https://netlify-core-workshop.netlify.app/primitives/functions/combine-and-filter) ([netlify/functions/platform-specific.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/functions/platform-specific.ts))
+- [Streaming APIs](https://netlify-core-workshop.netlify.app/primitives/functions/streams) ([netlify/functions/stream.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/functions/stream.ts))
+
+Serverless functions open a world of possibilities for running on-demand, server-side code without having to run a dedicated server. 
+
+With Netlify Functions, your serverless functions are version-controlled, built, and deployed along with the rest of your Netlify site, and we will automatically handle service discovery through our built-in API gateway. This eliminates overhead and brings the power of Deploy Previews and rollbacks to your functions.
+
+By default, any JavaScript/TypeScript file in a site's `netlify/functions` directory will become a Function available at the `/.netlify/functions/{filename}` route. A simple Hello World would look like this: 
+
+```ts
+// netlify/functions/hello-world.js
+export default async () => {
+  return new Response("Hello world!");
 };
 ```
 
-💡 The `path` parameter follows the [URL Pattern API](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API) spec.
+Once deployed, you can visit `/.netlify/functions/hello-world` to invoke your Function in production.
 
 💡 Learn more about [Functions](https://docs.netlify.com/functions/overview/) in our docs.
 
@@ -197,19 +200,14 @@ export const config: Config = {
 
 <details><summary>Part 4: Run middleware and personalize with Edge Functions</summary>
 
-We're going to make a swag section of the site that is personalized to the user based on their geolocation. Edge functions act as middleware for the CDN &mdash; they run in front of other routes!
+**🧑‍💻 Relevant demo and code:**
 
-i. Edge Functions are also great places to add A/B testing. You can add a cookie at the edge to segment user traffic into groups (also known as buckets) to run experimentation. Set a new cookie in `netlify/edge-functions/abtest.ts`:
+- [A/B testing](https://netlify-core-workshop.netlify.app/primitives/edge-functions/ab-testing) ([netlify/edge-functions/abtest.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/edge-functions/abtest.ts))
+- [Geolocation](https://netlify-core-workshop.netlify.app/primitives/edge-functions/geolocation) ([netlify/edge-functions/get-geo.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/edge-functions/get-geo.ts))
 
-```diff
-+ // set the new "ab-test-bucket" cookie
-+ context.cookies.set({
-+   name: bucketName,
-+   value: newBucketValue,
-+ });
+Edge functions are like Functions, but they execute closer to where your users are. While you can reach them as you would an endpoint, they can also chain in front of any route on your site. Think of them like middleware for the CDN: they can add HTTP headers and transform responses, passing along the next request, before ultimately reaching your users. 
 
-  return response;
-```
+All this dynamic processing happens in a secure runtime based on Deno directly from the worldwide network edge location closest to each user for fast response times. Plus, you have the option to cache edge function responses for even faster response times. Edge functions are version-controlled, built, and deployed along with the rest of your site. This eliminates overhead and brings the power of Deploy Previews and rollbacks to your edge functions.
 
 💡 Learn more about [Edge Functions](https://docs.netlify.com/edge-functions/overview/) in our docs.
 
