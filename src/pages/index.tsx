@@ -74,9 +74,7 @@ export default function Index() {
           <h3>Blobs</h3>
           <ul>
             <li>
-              <Link href="/primitives/functions/blobs">
-                Access blob storage
-              </Link>
+              <Link href="/primitives/blobs/blobs">Access blob storage</Link>
             </li>
           </ul>
           <h3>Image CDN</h3>

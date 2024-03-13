@@ -217,13 +217,60 @@ i. Edge Functions are also great places to add A/B testing. You can add a cookie
 
 <details><summary>Part 5: Globally persist data with Blobs</summary>
 
-Here, we'll discuss how to read and write data to blob storage.
+**🧑‍💻 Relevant demo and code:**
+
+- [Access blob storage](https://netlify-core-workshop.netlify.app/primitives/functions/blobs) ([netlify/functions/blob.ts](https://github.com/netlify/netlify-workshop/blob/main/netlify/functions/blob.ts))
+
+Netlify Blobs is a highly-available S3-like data store optimized for frequent reads and infrequent writes. Provisioning, configuration, and access control is handled automatically. This integrated zero-configuration solution helps you focus on building business value in your project rather than toil on setting up and scaling a separate blob storage solution. 
+
+With Blobs, you can store and retrieve unstructured data extremely easily. Blobs are ubiquitous: you can access them in the build, in functions, and in edge functions. 
+
+```ts
+import { getStore } from "@netlify/blobs";
+
+export default async (req: Request) => {
+  const store = getStore("ntl-workshop-todos");
+
+  if (req.method === "GET") {
+    const todos = await store.get("todos", { type: "json" });
+    return new Response(todos || JSON.stringify([]), { status: 200 });
+  }
+
+  if (req.method === "PUT") {
+    const body = await req.json();
+    await store.setJSON("todos", body);
+    return new Response("Todos updated", { status: 200 });
+  }
+};
+```
+
+💡 Learn more about [Netlify Blobs](https://docs.netlify.com/blobs/overview/) in our docs.
 
 </details>
 
 <details><summary>Part 6: Optimize images at runtime with Image CDN</summary>
 
-Here, we'll discuss how easy it is to optimize images at runtime with Image CDN.
+**🧑‍💻 Relevant demo and code:**
+
+- [Same-origin images](https://netlify-core-workshop.netlify.app/primitives/image-cdn/same-origin) ([src/pages/primitives/image-cdn/same-origin.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/primitives/image-cdn/same-origin.tsx))
+- [Remote images](https://netlify-core-workshop.netlify.app/primitives/image-cdn/remote) ([src/pages/primitives/image-cdn/remote.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/primitives/image-cdn/remote.tsx))
+
+You may have experienced pain points in the past dealing with image optimizations for the web. Do you keep raw source images in a repo, and run them through `sharp` or `image-magick` at during the build? That would increase build time and costs significantly. Either way, you'd still need to deal with various image formats, sizing, pixel density, `srcset` attributes, etc. 
+
+With Netlify Image CDN, you can transform images on demand without impacting build times. Image CDN also handles content negotiation to use the most efficient image format for the requesting client. Optimizing the size and format of your images improves both the runtime performance and reliability of your site. Transformations are integrated natively into the CDN so that repeated requests leverage layers of caching for improved performance.
+
+To use Netlify Image CDN, simply prefix your image URLs with `/.netlify/images?url=`: 
+
+```diff
+- <img src="/owl.jpeg" />
++ <img src="/.netlify/images?url=/owl.jpeg" />
+```
+
+The next time you request that image, you'll see the format be converted on-the-fly to a more optimal compression format that your browser supports. There's no need to pre-generate images of different formats, or stuff multiple URLs in a `srcset` attribute -- it's all handled at request-time, and cached on Netlify's CDN. 
+
+You can configure many other aspects of the image, such as size, fit, position, format, and quality, by passing in [additional query parameters](https://docs.netlify.com/image-cdn/overview/#transform-images).
+
+💡 Learn more about [Image CDN](https://docs.netlify.com/image-cdn/overview/) in our docs.
 
 </details>
 

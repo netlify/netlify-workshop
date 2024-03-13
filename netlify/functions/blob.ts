@@ -4,13 +4,13 @@ export default async (req: Request) => {
   const store = getStore("ntl-workshop-todos");
 
   if (req.method === "GET") {
-    const todos = await store.get("todos");
+    const todos = await store.get("todos", { type: "json" });
     return new Response(todos || JSON.stringify([]), { status: 200 });
   }
 
   if (req.method === "PUT") {
     const body = await req.json();
-    await store.set("todos", JSON.stringify(body));
+    await store.setJSON("todos", body);
     return new Response("Todos updated", { status: 200 });
   }
 
