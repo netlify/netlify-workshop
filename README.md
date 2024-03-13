@@ -21,7 +21,7 @@ In this workshop, you will learn how to:
 
 ### Local setup and CI/CD workflow
 
-<details><summary>Part 1: Initial setup</summary>
+<details><summary>Part 1: Initial setup</summary><br />
 
 i. [Log in to Netlify](http://app.netlify.com). If you haven't made an account yet, then [sign up](https://app.netlify.com/signup).
 
@@ -54,20 +54,17 @@ netlify dev
 
 </details>
 
-<details><summary>Part 2: Understanding deploy contexts and CI/CD</summary>
+<details><summary>Part 2: Understanding deploy contexts and CI/CD</summary><br />
 
 Create a new branch, commit changes, push the branch, and open a pull request.
 
 ```bash
-git checkout -b feat/bookshelf
-git add -A
-git commit -m "Adding a list of books to the home page"
-git push origin feat/bookshelf
+git checkout -b testing
+git commit -m "Changing some headings to red"
+git push origin testing
 ```
 
 You should see a link to the Deploy Preview as a comment by the Netlify bot on the pull request. Pushing to an open pull request [will kick off a new build](https://www.netlify.com/products/build/) in the Continuous Integration pipeline, and you can inspect the deploy logs as the build is building and deploying.
-
-In addition to deploy logs, the Netlify UI gives you access to function logs as well. You can change the region a function executes by changing the region selector in **Site configuration > Build & deploy > Functions**.
 
 In the Deploy Preview itself, you'll notice a floating toolbar anchored to the bottom of your screen. This is the [Netlify Drawer](https://www.netlify.com/products/deploy-previews/). You and your teammates can use this to leave feedback to each other about the Deploy Preview. Any comments you make will sync back to the pull request on GitHub (or any Git service that you may use).
 
@@ -84,17 +81,25 @@ git pull origin main
 
 </details>
 
-<details><summary>Part 3: Share environment variables with your team</summary>
+<details><summary>Part 3: Share environment variables with your team</summary><br />
 
-You can manage environment variables in the UI and CLI.
+You can securely manage and share environment variables with your teammates in both the Netlify CLI and UI. Let's start with the CLI.
 
-Go to **Site configuration > Environment variables** to add site-specific env vars to your site.
-
-In the CLI, enter the following command to create an environment variable that is scoped to the Functions runtime:
+It's common practice for projects to have a gitignored `.env` file in the root of the repo. This one doesn't, so let's add a dummy one now:
 
 ```bash
-netlify env:set OPENAI_KEY <YOUR_VALUE> --scope functions
+echo "MY_API_TOKEN=asdf123456789" > .env
 ```
+
+To share this hypothetically-sensitive value with your team, simply use the `env:import` command:
+
+```bash
+netlify env:import .env
+```
+
+Now, when you go to **Site configuration > Environment variables** in the Netlify UI, you should see your environment variable that you had saved in your `.env` file. 
+
+You can adjust deploy contexts and scopes in the UI, and in the CLI too. 
 
 💡 Learn more about [environment variables](https://docs.netlify.com/environment-variables/overview/) in our docs.
 
@@ -102,11 +107,11 @@ netlify env:set OPENAI_KEY <YOUR_VALUE> --scope functions
 
 ### Platform features
 
-<details><summary>Part 1: Getting acquainted with the Netlify UI</summary>
+<details><summary>Part 1: Getting acquainted with the Netlify UI</summary><br />
 
 Here, we'll take a quick segue from our CLI and dev environment to showcase more features from the Netlify UI.
 
-- Deploy logs
+- [Deploy logs](https://docs.netlify.com/site-deploys/overview/#deploy-log)
 - [Log Drains](https://docs.netlify.com/monitor-sites/log-drains/)
 - [Analytics](https://docs.netlify.com/monitor-sites/site-analytics/)
 - [Real User Metrics](https://docs.netlify.com/monitor-sites/real-user-metrics/)
@@ -115,34 +120,47 @@ Here, we'll take a quick segue from our CLI and dev environment to showcase more
 
 </details>
 
-<details><summary>Part 2: High-level overview of platform primitives</summary>
+<details><summary>Part 2: High-level overview of platform primitives</summary><br />
 
-Here, we'll list out use cases and limitations of core primitives, and why you would choose one over the other.
+These are the primitives that we'll be talking more about in Day 2 of this workshop. It's useful to understand their benefits and how they compare to one another. 
 
-- Functions
-- Edge Functions
-- Blobs
-- Image CDN
+- **Functions**
+  - Built on AWS Lambda
+  - Runs in a single region (this is configurable)
+  - 10s execution time (can be extended up to 26s)
+  - 50MB bundle size max, 6MB payload size max
+  - Supports streaming
+- **Edge Functions**
+  - Built on Deno Deploy
+  - Runs on the edge, geographically close to user
+  - Must respond with headers within 40s
+  - 20MB bundle size max
+  - Supports streaming
+- **Blobs**
+  - Built on AWS S3
+  - Ubiquitously available in build, functions, edge functions
+  - Optimized for frequent reads / infrequent writes
+  - Supports CRUD operations
+  - Deploy-specific stores
+- **Image CDN**
+  - Built on Imgix
+  - Dynamically optimize and cache images at request-time
+
+Netlify offers more primitives than this -- for example, you can create serverless cron jobs with [Scheduled Functions](https://docs.netlify.com/functions/scheduled-functions/), and run long-running tasks with [Background Functions](https://docs.netlify.com/functions/background-functions/)! But we won't dive into those topics during this workshop. 
 
 </details>
 
 ### Platform primitives
 
-<details><summary>Part 1: Configuring headers, proxies, and redirects</summary>
+<details><summary>Part 1: Configuring headers, proxies, and redirects</summary><br />
 
-Inside your publish directory (for this repo, `/public`), add a `_redirects` file that contains the following:
+You can configure many aspects of your site in code with the [netlify.toml](https://docs.netlify.com/configure-builds/file-based-configuration/#sample-netlify-toml-file) file. 
 
-```
-/*  /index.html  200
-```
-
-For every fallthrough case (i.e. whenever a route is accessed and there isn't a file match), it will now redirect back to `/index.html`, where `react-router` will route accordingly.
-
-Similar to the `_redirects` file is the `_headers` file. Here you can set custom headers for routes of your choosing. Create a `/public/_headers` file, and save the following:
+Similar to the `_redirects` file is the `_headers` file. Here you can set custom headers for routes of your choosing. Inside the `/public/_headers` file, and save the following:
 
 ```
 /*
-  X-Frame-Options: SAMEORIGIN
+  X-Frame-Options: deny
 ```
 
 This will prevent your site from being loaded in an iframe, a technique that help your site prevent [clickjacking](https://en.wikipedia.org/wiki/Clickjacking) attacks.
@@ -150,28 +168,30 @@ This will prevent your site from being loaded in an iframe, a technique that hel
 You can also configure both redirects and headers inside the `/netlify.toml` file. Here is the `netlify.toml` equivalents of the above:
 
 ```
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
+    X-Frame-Options = "deny"
 ```
 
-💡 Learn more about [redirects](https://docs.netlify.com/routing/redirects/) and [custom headers](https://docs.netlify.com/routing/headers/) in our docs.
+💡 Learn more about [redirects and rewrites](https://docs.netlify.com/routing/redirects/) and [custom headers](https://docs.netlify.com/routing/headers/) in our docs.
 
 </details>
 
-<details><summary>Part 2: Rendering techniques and caching strategies</summary>
+<details><summary>Part 2: Rendering techniques and caching strategies</summary><br />
+
+**🧑‍💻 Relevant demo and code:**
+
+- [Static site generation (SSG)](https://netlify-core-workshop.netlify.app/rendering-strategies/ssg) ([src/pages/rendering-strategies/ssg.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/rendering-strategies/ssg.tsx))
+- [Server-side rendering (SSR)](https://netlify-core-workshop.netlify.app/rendering-strategies/ssr) ([src/pages/rendering-strategies/ssr.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/rendering-strategies/ssr.tsx))
+- [Stale-while-revalidate (SWR)](https://netlify-core-workshop.netlify.app/rendering-strategies/swr) ([src/pages/rendering-strategies/swr.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/rendering-strategies/swr.tsx))
+- [On-demand revalidation (ODR)](https://netlify-core-workshop.netlify.app/rendering-strategies/odr) ([src/pages/rendering-strategies/odr.tsx](https://github.com/netlify/netlify-workshop/blob/main/src/pages/rendering-strategies/odr.tsx))
 
 💡 Learn more about [caching](https://docs.netlify.com/platform/caching/) in our docs.
 
 </details>
 
-<details><summary>Part 3: Going serverless with Functions</summary>
+<details><summary>Part 3: Going serverless with Functions</summary><br />
 
 **🧑‍💻 Relevant demo and code:**
 
@@ -198,7 +218,7 @@ Once deployed, you can visit `/.netlify/functions/hello-world` to invoke your Fu
 
 </details>
 
-<details><summary>Part 4: Run middleware and personalize with Edge Functions</summary>
+<details><summary>Part 4: Run middleware and personalize with Edge Functions</summary><br />
 
 **🧑‍💻 Relevant demo and code:**
 
@@ -213,7 +233,7 @@ All this dynamic processing happens in a secure runtime based on Deno directly f
 
 </details>
 
-<details><summary>Part 5: Globally persist data with Blobs</summary>
+<details><summary>Part 5: Globally persist data with Blobs</summary><br />
 
 **🧑‍💻 Relevant demo and code:**
 
@@ -231,7 +251,7 @@ export default async (req: Request) => {
 
   if (req.method === "GET") {
     const todos = await store.get("todos", { type: "json" });
-    return new Response(todos || JSON.stringify([]), { status: 200 });
+    return Response.json(todos || JSON.stringify([]), { status: 200 });
   }
 
   if (req.method === "PUT") {
@@ -246,7 +266,7 @@ export default async (req: Request) => {
 
 </details>
 
-<details><summary>Part 6: Optimize images at runtime with Image CDN</summary>
+<details><summary>Part 6: Optimize images at runtime with Image CDN</summary><br />
 
 **🧑‍💻 Relevant demo and code:**
 
