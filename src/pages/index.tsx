@@ -6,6 +6,7 @@ export default function Index() {
   return (
     <main>
       <Nav title="Netlify Workshop" />
+
       <section className="flex columns">
         <div>
           <h2>Rendering strategies</h2>
@@ -90,6 +91,10 @@ export default function Index() {
           </ul>
         </div>
       </section>
+      <hr></hr>
+          <Link href="https://github.com/netlify/netlify-workshop/">
+             https://github.com/netlify/netlify-workshop/
+          </Link>
     </main>
   );
 }
