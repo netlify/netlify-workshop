@@ -27,13 +27,11 @@ i. [Log in to Netlify](https://app.netlify.com). If you haven't made an account 
 
 ii. Install the [Netlify GitHub app](https://github.com/apps/netlify/installations/select_target) on your org or personal GitHub account if you have not done so already.
 
-iii. Deploy this repo to Netlify! Clicking the button below will copy the contents of this repo into a repo that you control, and create a new site that is linked to your new repo.
+iii. Fork workshop project to personal Github account.
 
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/netlify/netlify-workshop">
-  <img src="https://www.netlify.com/img/deploy/button.svg" alt="" title="Deploy to Netlify">
-</a>
+iv.  Deploy workshop project to own personal Netlify account 
 
-iv. Clone your new repo, and install dependencies locally.
+v. Clone your new repo, and install dependencies locally.
 
 ```bash
 git clone <new_repo_url>
