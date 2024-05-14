@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Remote() {
   return (
     <main>
-      <Nav title="Remote images" />
+      <Nav title="Remote images on Netlify Image CDN" />
       <section>
         <h1>Remote image on Netlify CDN</h1>
         <div
@@ -19,6 +19,7 @@ export default function Remote() {
               key={user}
               loading="lazy"
               src={`https://github.com/${user}.png`}
+              alt={user}
               style={{ borderRadius: 100 }}
               width="200"
               height="200"
