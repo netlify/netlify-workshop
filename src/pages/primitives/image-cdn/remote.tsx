@@ -1,6 +1,6 @@
 import Nav from "~/components/Nav";
 const GH_USERS = ["jasonbarry", "bridgpal", "dashedstripes", "rsedighi"];
-
+import Image from "next/image";
 export default function Remote() {
   return (
     <main>
@@ -15,12 +15,13 @@ export default function Remote() {
           }}
         >
           {GH_USERS.map((user) => (
-            <img
+            <Image
               key={user}
               loading="lazy"
-              src={`/.netlify/images/?url=https://github.com/${user}.png`}
+              src={`https://github.com/${user}.png`}
               style={{ borderRadius: 100 }}
               width="200"
+              height="200"
             />
           ))}
         </div>
