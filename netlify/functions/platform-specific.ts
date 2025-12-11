@@ -28,7 +28,6 @@ export default async (req: Request, context: Context) => {
   const allProducts = nintendo.products.concat(sony.products);
 
   if (!platform) {
-    // @ts-expect-error Response.json() does not require `new` operator
     return Response.json(allProducts);
   }
 
@@ -36,7 +35,6 @@ export default async (req: Request, context: Context) => {
   const filteredProducts = allProducts.filter(
     (product) => product.promo === platform,
   );
-  // @ts-expect-error Response.json() does not require `new` operator
   return Response.json(filteredProducts);
 };
 
