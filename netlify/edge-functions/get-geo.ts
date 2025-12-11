@@ -20,7 +20,6 @@ export default async (request: Request, context: Context) => {
   //   }
   // }
 
-  // @ts-expect-error use `Response.json()` to set content-type as application/json
   return Response.json({
     geo: context.geo,
   });

@@ -1,6 +1,6 @@
 import { stream } from "@netlify/functions";
 
-// @ts-expect-error async streams are allowed
+// @ts-expect-error Type mismatch between Web Streams API and Node.js streams
 export const handler = stream(async () => {
   const encoder = new TextEncoder();
   const formatter = new Intl.DateTimeFormat("en", { timeStyle: "medium" });
