@@ -6,7 +6,7 @@ const SF_LAT = 37.7749;
 const SF_LONG = -122.4194;
 const WEATHER_API_URL = `https://api.open-meteo.com/v1/forecast?latitude=${SF_LAT}&longitude=${SF_LONG}&current_weather=true&temperature_unit=fahrenheit`;
 
-export default async (req: Request) => {
+export default async () => {
   console.log("Scheduled function starting...");
 
   try {

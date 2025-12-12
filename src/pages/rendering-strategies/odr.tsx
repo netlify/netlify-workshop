@@ -12,7 +12,7 @@ export default function ODR({
 
   const purgeCache = async () => {
     setIsPurging(true);
-    const response = await fetch("/.netlify/functions/purge-cache-tag?tag=odr");
+    const response = await fetch("/api/purge-cache?tag=odr");
     if (response.ok) {
       setIsPurging(false);
       setFinishedPurging(true);
