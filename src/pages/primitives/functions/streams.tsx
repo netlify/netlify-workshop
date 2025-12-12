@@ -10,7 +10,7 @@ export default function Proxy() {
   const getStreamResponse = async () => {
     setError(false);
     setLoading(true);
-    const response = await fetch("/.netlify/functions/stream");
+    const response = await fetch("/api/stream");
 
     const reader = response?.body?.getReader();
 
