@@ -1,5 +1,9 @@
 @import url("water.css/out/light.min.css");
 
+body {
+  background-color: #c3f4fa;
+}
+
 .flex {
   display: flex;
 }
