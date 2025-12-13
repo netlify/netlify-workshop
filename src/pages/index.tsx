@@ -58,6 +58,11 @@ export default function Index() {
             <li>
               <Link href="/primitives/functions/streams">Streams</Link>
             </li>
+            <li>
+              <Link href="/primitives/functions/scheduled-functions">
+                Scheduled Functions
+              </Link>
+            </li>
           </ul>
           <h3>Edge functions</h3>
           <ul>

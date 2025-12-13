@@ -296,7 +296,7 @@ Read these recent blog posts focused on Enterprise releases, features, and use c
 
 - [Netlify + AI: Why’d my deploy fail?](https://www.netlify.com/blog/netlify-ai-why-did-my-deploy-fail/)
 - [Full control over caching with cache ID](https://www.netlify.com/blog/full-control-over-caching-with-cache-id/)
-- [Introducing Netlify Image CDN Beta](https://www.netlify.com/blog/introducing-netlify-image-cdn-beta/)
+- [[Introducing Netlify Image CDN](https://docs.netlify.com/image-cdn/overview/)]
 - [Introducing Netlify Blobs Beta](https://www.netlify.com/blog/introducing-netlify-blobs-beta/)
 - [Cache-tags & Purge API](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/)
 - [Introducing Netlify Functions 2.0](https://www.netlify.com/blog/introducing-netlify-functions-2-0/)
