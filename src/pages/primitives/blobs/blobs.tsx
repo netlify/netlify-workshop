@@ -17,7 +17,7 @@ export default function Blobs() {
 
     async function getTodos() {
       setLoading(true);
-      const response = await fetch("/.netlify/functions/blob", {
+      const response = await fetch("/api/blob", {
         method: "GET",
       });
       const data = await response.json();
@@ -27,7 +27,7 @@ export default function Blobs() {
   }, []);
 
   async function updateTodos(t: Todo[]) {
-    await fetch("/.netlify/functions/blob", {
+    await fetch("/api/blob", {
       method: "PUT",
       body: JSON.stringify(t),
     });

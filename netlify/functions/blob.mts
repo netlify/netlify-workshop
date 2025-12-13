@@ -19,5 +19,5 @@ export default async (req: Request) => {
 };
 
 export const config: Config = {
-    path: "/.netlify/functions/blob",
+    path: "/api/blob",
 };
