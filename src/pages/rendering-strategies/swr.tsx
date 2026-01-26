@@ -6,15 +6,25 @@ export default function SWR({
   time,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <main>
+    <>
       <Nav title="Stale-while-revalidate" />
-      <h1>Stale-while-revalidate</h1>
-      <p>This page contains the following cache headers:</p>
-      <code>Cache-Control: public, s-maxage=10, stale-while-revalidate=59</code>
-      <br />
-      <p>This page was last revalidated:</p>
-      <time dateTime={time}>{time}</time>
-    </main>
+      <main>
+        <div className="page-header">
+          <h1>Stale-While-Revalidate</h1>
+          <p>Serve cached content while updating in the background</p>
+        </div>
+
+        <section className="info-box">
+          <h2>Cache Headers</h2>
+          <code>Cache-Control: public, s-maxage=10, stale-while-revalidate=59</code>
+        </section>
+
+        <section>
+          <div className="data-label">Last Revalidated</div>
+          <time dateTime={time}>{time}</time>
+        </section>
+      </main>
+    </>
   );
 }
 

@@ -21,20 +21,29 @@ interface Props {
 export default function ABTesting(props: Props) {
   const { bucket } = props;
   return (
-    <main>
+    <>
       <Nav title="A/B testing" />
-      <section>
-        <h1>Edge Functions: A/B testing</h1>
-        <p>
-          👋 Hello, would you like some{" "}
-          {bucket === "A" ? (
-            <strong style={{ color: "green" }}>apples? 🍏🍎🍏</strong>
-          ) : (
-            <strong style={{ color: "blue" }}>blueberries? 🫐🫐🫐</strong>
-          )}
-        </p>
-      </section>
-    </main>
+      <main>
+        <div className="page-header">
+          <h1>A/B Testing</h1>
+          <p>Serve different content based on user bucket assignment</p>
+        </div>
+
+        <section className="info-box">
+          <p>
+            Hello, would you like some{" "}
+            {bucket === "A" ? (
+              <strong className="variant-a">apples?</strong>
+            ) : (
+              <strong className="variant-b">blueberries?</strong>
+            )}
+          </p>
+          <p>
+            Your bucket: <code>{bucket || "Not assigned"}</code>
+          </p>
+        </section>
+      </main>
+    </>
   );
 }
 
