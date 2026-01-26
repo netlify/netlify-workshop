@@ -12,13 +12,23 @@ export default function Proxy() {
   };
 
   return (
-    <main>
+    <>
       <Nav title="Proxy API requests" />
-      <section>
-        <h1>Functions: Proxy API requests</h1>
-        <button onClick={handleClick}>Tell me a joke</button>
-        <p>{joke}</p>
-      </section>
-    </main>
+      <main>
+        <div className="page-header">
+          <h1>Proxy API Requests</h1>
+          <p>Use serverless functions to proxy external API calls</p>
+        </div>
+
+        <section>
+          <button onClick={handleClick}>Tell me a joke</button>
+          {joke && (
+            <div className="result">
+              <p>{joke}</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
 }

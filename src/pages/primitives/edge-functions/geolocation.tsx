@@ -16,31 +16,35 @@ export default function Geolocation() {
   }, []);
 
   return (
-    <main>
+    <>
       <Nav title="Geography from Edge Functions requests" />
-      <section>
-        <h1>Edge Functions: Geolocation Data</h1>
-        <h2>Search for flights</h2>
-        <form>
-          <label>
-            <span>Origin:</span>
-            <input
-              autoFocus
-              onChange={(e) => setOrigin(e.target.value)}
-              placeholder="From"
-              type="text"
-              value={origin}
-            />
-          </label>
-          <label>
-            <span>Destination:</span>
-            <input placeholder="To" type="text" />
-          </label>
-          <button style={{ position: "relative", top: 8 }} type="submit">
-            Search
-          </button>
-        </form>
-      </section>
-    </main>
+      <main>
+        <div className="page-header">
+          <h1>Geolocation Data</h1>
+          <p>Pre-fill forms using location from edge functions</p>
+        </div>
+
+        <section>
+          <h2>Search for Flights</h2>
+          <form className="form-inline">
+            <label>
+              <span>Origin</span>
+              <input
+                autoFocus
+                onChange={(e) => setOrigin(e.target.value)}
+                placeholder="From"
+                type="text"
+                value={origin}
+              />
+            </label>
+            <label>
+              <span>Destination</span>
+              <input placeholder="To" type="text" />
+            </label>
+            <button type="submit">Search</button>
+          </form>
+        </section>
+      </main>
+    </>
   );
 }
