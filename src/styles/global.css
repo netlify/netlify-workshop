@@ -6,18 +6,18 @@
 /* CSS Custom Properties */
 :root {
   /* Colors */
-  --color-bg: #fafafa;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
-  --color-accent: #00ad9f;
-  --color-accent-hover: #009688;
-  --color-link: #00ad9f;
-  --color-link-hover: #007a6e;
-  --color-success: #10b981;
-  --color-error: #ef4444;
-  --color-code-bg: #f3f4f6;
+  --color-bg: #000000;
+  --color-surface: #111111;
+  --color-text: #e5e5e5;
+  --color-text-muted: #9ca3af;
+  --color-border: #2a2a2a;
+  --color-accent: #00d4c8;
+  --color-accent-hover: #00bfb3;
+  --color-link: #00d4c8;
+  --color-link-hover: #00f0e0;
+  --color-success: #34d399;
+  --color-error: #f87171;
+  --color-code-bg: #1a1a1a;
 
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -191,7 +191,7 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(0, 173, 159, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 212, 200, 0.15);
 }
 
 input::placeholder {
@@ -337,12 +337,12 @@ hr {
 
 .status-success {
   color: var(--color-success);
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: rgba(52, 211, 153, 0.15);
 }
 
 .status-error {
   color: var(--color-error);
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: rgba(248, 113, 113, 0.15);
 }
 
 /* Info box */
