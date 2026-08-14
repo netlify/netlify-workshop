@@ -37,6 +37,11 @@ export default function Index() {
                     On-Demand Revalidation (ODR)
                   </Link>
                 </li>
+                <li>
+                  <Link href="/rendering-strategies/scheduled-revalidation">
+                    Scheduled Revalidation
+                  </Link>
+                </li>
               </ul>
             </div>
 
