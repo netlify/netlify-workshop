@@ -1,21 +1,13 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import Link from "next/link";
-import { getStore } from "@netlify/blobs";
 
 import Nav from "~/components/Nav";
 
 const CACHE_TAG = "scheduled-revalidation";
 
-interface RevalidationRecord {
-  purgedAt: string;
-  nextRun: string | null;
-  runCount: number;
-}
-
 export default function ScheduledRevalidation({
   generatedAt,
-  lastRevalidation,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isPurging, setIsPurging] = useState(false);
   const [finishedPurging, setFinishedPurging] = useState(false);
@@ -43,27 +35,6 @@ export default function ScheduledRevalidation({
           <p>Cached forever at the edge, expired once a day on a schedule</p>
         </div>
 
-        <section className="grid grid-2">
-          <div>
-            <div className="data-label">This page was generated at</div>
-            <div className="data-value">
-              <time dateTime={generatedAt}>{generatedAt}</time>
-            </div>
-          </div>
-          <div>
-            <div className="data-label">Cache last expired at</div>
-            <div className="data-value">
-              {lastRevalidation ? (
-                <time dateTime={lastRevalidation.purgedAt}>
-                  {lastRevalidation.purgedAt}
-                </time>
-              ) : (
-                "Waiting for the first scheduled run"
-              )}
-            </div>
-          </div>
-        </section>
-
         <section className="info-box">
           <h2>Cache Configuration</h2>
           <p>
@@ -81,10 +52,17 @@ export default function ScheduledRevalidation({
         </section>
 
         <section>
+          <div className="data-label">This page was generated at</div>
+          <div className="data-value">
+            <time dateTime={generatedAt}>{generatedAt}</time>
+          </div>
+        </section>
+
+        <section>
           <h2>How It Works</h2>
           <p>
-            The generated timestamp above only changes once a day, even though
-            this page is server-rendered on every cache miss.
+            The timestamp above only changes once a day, even though this page
+            is server-rendered on every cache miss.
           </p>
           <ol>
             <li>
@@ -97,7 +75,8 @@ export default function ScheduledRevalidation({
               <Link href="https://docs.netlify.com/build/functions/scheduled-functions/">
                 Scheduled Function
               </Link>{" "}
-              runs <code>@daily</code> (midnight UTC) and purges that cache tag.
+              runs <code>@daily</code> (midnight UTC) and purges that cache tag
+              — exactly what the on-demand endpoint below does, just on a timer.
             </li>
             <li>
               The next request after the purge misses the cache, re-renders the
@@ -108,18 +87,8 @@ export default function ScheduledRevalidation({
             Because the schedule owns expiry, the cache lifetime is a decision
             made server-side rather than a TTL every visitor races against.
             Scheduled functions only run on published production deploys, so on
-            a deploy preview the timestamps change only when you purge manually.
+            a deploy preview the timestamp changes only when you purge manually.
           </p>
-          {lastRevalidation?.nextRun && (
-            <p>
-              Next scheduled run:{" "}
-              <time dateTime={lastRevalidation.nextRun}>
-                {lastRevalidation.nextRun}
-              </time>{" "}
-              ({lastRevalidation.runCount} run
-              {lastRevalidation.runCount === 1 ? "" : "s"} so far)
-            </p>
-          )}
         </section>
 
         <hr />
@@ -127,7 +96,7 @@ export default function ScheduledRevalidation({
         <section>
           <h2>Don&apos;t want to wait until midnight?</h2>
           <p>
-            Purging the same cache tag by hand does exactly what the schedule
+            Purging the same cache tag on demand does exactly what the schedule
             does, just sooner.
           </p>
           <button onClick={purgeCache} disabled={isPurging}>
@@ -157,24 +126,17 @@ export default function ScheduledRevalidation({
 
 export const getServerSideProps: GetServerSideProps<{
   generatedAt: string;
-  lastRevalidation: RevalidationRecord | null;
 }> = async ({ res }) => {
   // Cache indefinitely on the CDN; the scheduled function decides when it expires.
   res.setHeader(
     "Netlify-CDN-Cache-Control",
-    "public, s-maxage=31536000, must-revalidate"
+    "public, s-maxage=31536000, must-revalidate",
   );
   res.setHeader("Cache-Tag", CACHE_TAG);
-
-  const store = getStore("revalidation-store");
-  const lastRevalidation = (await store.get("scheduled", {
-    type: "json",
-  })) as RevalidationRecord | null;
 
   return {
     props: {
       generatedAt: new Date().toISOString(),
-      lastRevalidation,
     },
   };
 };
