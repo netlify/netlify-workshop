@@ -12,7 +12,7 @@ export default function ODR({
 
   const purgeCache = async () => {
     setIsPurging(true);
-    const response = await fetch("/.netlify/functions/purge-cache-tag?tag=odr");
+    const response = await fetch("/api/purge-cache?tag=odr");
     if (response.ok) {
       setIsPurging(false);
       setFinishedPurging(true);
@@ -24,53 +24,54 @@ export default function ODR({
   };
 
   return (
-    <main>
+    <>
       <Nav title="On Demand Revalidation" />
-      <h1>On Demand Revalidation</h1>
-      <p>This page contains the following cache headers:</p>
-      <code>Cache-Control: public, max-age=604800</code>
-      <br />
-      <code>Cache-Tag: odr</code>
-      <p>This page was last revalidated:</p>
-      <time dateTime={time}>{time}</time>
-
-      <br />
-      <br />
-      <hr />
-      <br />
-
-      <div>
-        <button onClick={purgeCache}>
-          {isPurging ? "Purging..." : "Purge this page by cache tag: [odr]"}
-        </button>
-      </div>
-
-      {finishedPurging && (
-        <div
-          style={{
-            padding: "2rem",
-            borderRadius: "6px",
-            textAlign: "center",
-            marginTop: "1rem",
-          }}
-        >
-          <p>Purged! Refresh the page to see the updated revalidation time!</p>
+      <main>
+        <div className="page-header">
+          <h1>On-Demand Revalidation</h1>
+          <p>Invalidate cached pages when content changes</p>
         </div>
-      )}
 
-      {error && (
-        <div
-          style={{
-            padding: "2rem",
-            borderRadius: "6px",
-            textAlign: "center",
-            marginTop: "1rem",
-          }}
-        >
-          <p>Failed to purge cache, please try again</p>
-        </div>
-      )}
-    </main>
+        <section className="info-box">
+          <h2>Cache Configuration</h2>
+          <p>
+            <code>Cache-Control: public, max-age=604800</code>
+          </p>
+          <p>
+            <code>Cache-Tag: odr</code>
+          </p>
+        </section>
+
+        <section>
+          <div className="data-label">Last Revalidated</div>
+          <time dateTime={time}>{time}</time>
+        </section>
+
+        <hr />
+
+        <section>
+          <button onClick={purgeCache}>
+            {isPurging ? "Purging..." : "Purge cache by tag: odr"}
+          </button>
+
+          {finishedPurging && (
+            <div className="result">
+              <p className="status status-success">
+                Purged successfully. Refresh to see the updated time.
+              </p>
+            </div>
+          )}
+
+          {error && (
+            <div className="result">
+              <p className="status status-error">
+                Failed to purge cache. Please try again.
+              </p>
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
 }
 
@@ -78,7 +79,6 @@ export const getServerSideProps: GetServerSideProps<{ time: string }> = async ({
   res,
 }) => {
   res.setHeader("Cache-Control", "public, max-age=604800");
-
   res.setHeader("Cache-Tag", "odr");
 
   return {

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Nav from "~/components/Nav";
 
-export default function Proxy() {
+export default function Streams() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -10,13 +10,15 @@ export default function Proxy() {
   const getStreamResponse = async () => {
     setError(false);
     setLoading(true);
-    const response = await fetch("/.netlify/functions/stream");
+    setResponse("");
+    const response = await fetch("/api/stream");
 
     const reader = response?.body?.getReader();
 
     if (!reader) {
       console.error("No reader available");
       setError(true);
+      setLoading(false);
       return;
     }
 
@@ -34,16 +36,34 @@ export default function Proxy() {
   };
 
   return (
-    <main>
+    <>
       <Nav title="Streaming Function Responses" />
-      <h1>Functions: Streaming Responses</h1>
-      <section>
-        <button onClick={getStreamResponse}>
-          {!loading ? "Get a streaming response" : "Fetching response..."}
-        </button>
-        {error && <p>An error occurred fetching streaming response</p>}
-        <div dangerouslySetInnerHTML={{ __html: response }}></div>
-      </section>
-    </main>
+      <main>
+        <div className="page-header">
+          <h1>Streaming Responses</h1>
+          <p>Stream data from serverless functions in real-time</p>
+        </div>
+
+        <section>
+          <button onClick={getStreamResponse} disabled={loading}>
+            {loading ? "Streaming..." : "Start stream"}
+          </button>
+
+          {error && (
+            <div className="result">
+              <p className="status status-error">
+                An error occurred while streaming.
+              </p>
+            </div>
+          )}
+
+          {response && (
+            <div className="result">
+              <div dangerouslySetInnerHTML={{ __html: response }} />
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
 }

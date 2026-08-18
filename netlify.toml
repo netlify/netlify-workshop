@@ -3,3 +3,15 @@
 
 [images]
   remote_images = ["https://github.com/.*"]
+
+# Cache headers for Image CDN source images
+[[headers]]
+  for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache headers for Netlify Image CDN transformed images
+[[headers]]
+  for = "/.netlify/images"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

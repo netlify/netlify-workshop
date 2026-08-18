@@ -15,28 +15,29 @@ const PHOTOS = [
 
 export default function SameOrigin() {
   return (
-    <main>
+    <>
       <Nav title="Same-origin images" />
-      <section>
-        <h1>Automatic image optimization</h1>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 8,
-          }}
-        >
-          {PHOTOS.map((photo) => (
-            <img
-              key={photo}
-              loading="lazy"
-              src={`/.netlify/images/?url=/photos/${photo}.jpg&w=800&h=500&fit=cover`}
-              width="400"
-              height="250"
-            />
-          ))}
+      <main>
+        <div className="page-header">
+          <h1>Same-Origin Images</h1>
+          <p>Automatic optimization for images hosted on your site</p>
         </div>
-      </section>
-    </main>
+
+        <section>
+          <div className="image-grid grid-2">
+            {PHOTOS.map((photo) => (
+              <img
+                key={photo}
+                loading="lazy"
+                src={`/.netlify/images/?url=/photos/${photo}.jpg&w=800&h=500&fit=cover`}
+                width="400"
+                height="250"
+                alt={photo}
+              />
+            ))}
+          </div>
+        </section>
+      </main>
+    </>
   );
 }

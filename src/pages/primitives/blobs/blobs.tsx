@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Nav from "~/components/Nav";
 
 interface Todo {
@@ -17,7 +16,7 @@ export default function Blobs() {
 
     async function getTodos() {
       setLoading(true);
-      const response = await fetch("/.netlify/functions/blob", {
+      const response = await fetch("/api/blob", {
         method: "GET",
       });
       const data = await response.json();
@@ -27,7 +26,7 @@ export default function Blobs() {
   }, []);
 
   async function updateTodos(t: Todo[]) {
-    await fetch("/.netlify/functions/blob", {
+    await fetch("/api/blob", {
       method: "PUT",
       body: JSON.stringify(t),
     });
@@ -49,6 +48,12 @@ export default function Blobs() {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleAddTodo();
+    }
+  };
+
   const handleDeleteTodo = async (key: string) => {
     const t = todos.filter((todo) => todo.key !== key);
     updateTodos(t);
@@ -56,21 +61,45 @@ export default function Blobs() {
   };
 
   return (
-    <div>
+    <>
       <Nav title="Blob Storage" />
-      <h1>Todo List</h1>
-      <input type="text" value={newTodo} onChange={handleInputChange} />
-      <button onClick={handleAddTodo}>Add Todo</button>
-      {!loading && (
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo.key}>
-              {todo.value}
-              <button onClick={() => handleDeleteTodo(todo.key)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+      <main>
+        <div className="page-header">
+          <h1>Blob Storage</h1>
+          <p>Persistent key-value storage with Netlify Blobs</p>
+        </div>
+
+        <section>
+          <h2>Todo List</h2>
+          <div className="todo-input">
+            <input
+              type="text"
+              value={newTodo}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Add a new todo..."
+            />
+            <button onClick={handleAddTodo}>Add</button>
+          </div>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : todos.length === 0 ? (
+            <p>No todos yet. Add one above.</p>
+          ) : (
+            <ul className="todo-list">
+              {todos.map((todo) => (
+                <li key={todo.key} className="todo-item">
+                  <span>{todo.value}</span>
+                  <button onClick={() => handleDeleteTodo(todo.key)}>
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
+    </>
   );
 }
