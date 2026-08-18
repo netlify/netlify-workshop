@@ -2,7 +2,7 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 
-import logoLight from "~/assets/logo-light.svg";
+import logoDark from "~/assets/logo-dark.svg";
 
 interface Props {
   title: string;
@@ -17,7 +17,7 @@ export default function Nav(props: Props) {
       </Head>
       <nav>
         <Link href="/">
-          <Image alt="Netlify logo" height={40} src={logoLight} />
+          <Image alt="Netlify logo" height={40} src={logoDark} />
         </Link>
       </nav>
     </header>
